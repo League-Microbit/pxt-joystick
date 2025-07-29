@@ -44,6 +44,7 @@ namespace joystick {
          
             while (input.runningTime() - startTime < 4000) {
                 basic.showIcon(IconNames.Target);
+                basic.clearScreen();
                 joystick.sendIRRadioMessage(DigitalPin.P8, channel, group);
                 basic.pause(750);
                 basic.clearScreen();

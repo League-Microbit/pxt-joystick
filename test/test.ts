@@ -2,5 +2,5 @@
 //joytest.testIPReceive();
 //joytest.testIPSend();
 
-//joytest.testRadioChannelIrSend();
+joytest.testRadioChannelIrSend();
 

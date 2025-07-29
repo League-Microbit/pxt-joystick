@@ -1,2 +1,2 @@
 
-joystick.run();
+//joystick.run();
