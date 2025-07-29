@@ -4,14 +4,17 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "leagueir": "github:League-Microbit/pxt-leagueir#master",
+        "radiop": "github:League-Microbit/pxt-radioext#master"
     },
     "files": [
         "src/main.ts",
+        "src/joystick.ts",
         "README.md"
     ],
     "testFiles": [
-        "src/test.ts"
+        "test/test.ts",
+        "test/testIRPacket.ts"
     ],
     "targetVersions": {
         "target": "8.0.11",

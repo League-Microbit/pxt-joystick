@@ -1,1 +1,6 @@
-// tests go here; this will not be compiled when this package is used as an extension.
+
+//joytest.testIPReceive();
+//joytest.testIPSend();
+
+//joytest.testRadioChannelIrSend();
+

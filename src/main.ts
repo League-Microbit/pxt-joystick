@@ -1,3 +1,2 @@
-basic.forever(function () {
-	
-})
+
+joystick.run();
