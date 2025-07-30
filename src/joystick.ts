@@ -15,6 +15,30 @@ namespace joystick {
         joystickp.init()
     }
 
+
+    function map(input:number, minIn:number, maxIn:number, minOut:number, maxOut:number): number {
+        return (input - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
+
+
+
+    let lastPx: number = 0;
+    let lastPy: number = 0;
+
+    function displayLedPosition(): void {
+        let x = pins.analogReadPin(joystickp.JoystickBitPin.X);
+        let y = pins.analogReadPin(joystickp.JoystickBitPin.Y);
+
+        let px = map(x - 100, 1023, 0, -2, 2) + 2
+        let py = map(y - 100, 1023, 0, -2, 2) + 2
+
+        led.unplot(lastPx, lastPy); // Clear the last position
+        led.plot(px, py)
+        lastPx = px;
+        lastPy = py;
+    }
+
+
     /**
      * Setup the message handler for sending radio pairing codes.
      */
@@ -60,7 +84,9 @@ namespace joystick {
         control.runInBackground(function () {
             while (true) {
                 if (_runJoystick) {
-                    joystickp.sendIfChanged();
+                    if (joystickp.sendIfChanged()) {
+                        displayLedPosition(); // Update the LED position based on joystick movement
+                    }
                     basic.pause(10);
                 } else {
                     basic.pause(1000);
