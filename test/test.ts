@@ -2,6 +2,6 @@
 //joytest.testIPReceive();
 //joytest.testIPSend();
 
-joytest.testRadioChannelIrSend();
+//joytest.testRadioChannelIrSend();
 
-//joystick.run();
+joystick.run();
