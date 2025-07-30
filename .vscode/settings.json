@@ -12,7 +12,8 @@
     },
     "files.associations": {
         "*.blocks": "html",
-        "*.jres": "json"
+        "*.jres": "json",
+        "print": "cpp"
     },
     "search.exclude": {
         "**/built": true,

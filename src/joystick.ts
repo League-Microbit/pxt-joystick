@@ -1,7 +1,10 @@
 
 namespace joystick { 
 
-    let _runJoystick: boolean = true;
+    export let _runJoystick: boolean = true;
+
+    let irtInit: boolean = false;
+    let joyBackgroundInit: boolean = false;
 
     export function sendIRRadioMessage(pin: DigitalPin, channel: number , group: number): void {
         let command = (channel << 8) | group;
@@ -16,6 +19,10 @@ namespace joystick {
      * Setup the message handler for sending radio pairing codes.
      */
     function initRadioTransfer() {
+
+        if (irtInit) return;
+        irtInit = true;
+
         input.onButtonPressed(Button.AB, function () {
             serial.writeLine("initRadioTransfer: Button A+B pressed, sending radio IR codes");
 
@@ -29,7 +36,7 @@ namespace joystick {
             let group = radiop.getGroup();
          
 
-            while (input.runningTime() - startTime < 10000) {
+            while (input.runningTime() - startTime < 4000) {
                 basic.showIcon(IconNames.Target);
                 joystick.sendIRRadioMessage(DigitalPin.P8, channel, group);
                 basic.pause(100);
@@ -46,6 +53,22 @@ namespace joystick {
         });
         
     }
+    function initJoyBackground() {
+        if (joyBackgroundInit) return;
+        joyBackgroundInit = true;
+
+        control.runInBackground(function () {
+            while (true) {
+                if (_runJoystick) {
+                    joystickp.sendIfChanged();
+                    basic.pause(10);
+                } else {
+                    basic.pause(1000);
+                }
+            }
+           
+        });
+    }
 
     /**
      * Run the joystick functionality
@@ -54,32 +77,21 @@ namespace joystick {
     export function run(channel: number = 0, group: number = 0): void {
 
         joystick.init();
-        radiop.init();
         negotiate.init("joystick");
-
+        
         if (channel === 0 || group === 0) {
+            radiop.init();
             negotiate.findFreeChannel();
         }  else {
-            radiop.setChannel(channel);
-            radiop.setGroup(group);
+            radiop.init(channel, group);
         }
+
+        initRadioTransfer(); // Install A+B buttons to run the IR transfer
+        initJoyBackground(); // Start the background task to send joystick data
 
         serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
 
-        initRadioTransfer(); // Install A+B buttons to run the IR transfer
-
-        basic.forever(function () {
-            if (_runJoystick) {
-                joystickp.sendIfChanged();
-            } else {
-                basic.pause(100);
-            }
-           
-        });
-
-
     }
-    
 
 
 }
