@@ -8,8 +8,6 @@ namespace joystick {
         leagueir.sendIrAddressCommand(pin, leagueir.Address.RadioChannel, command);
     }
 
-
-
     export function init(): void {
         joystickp.init()
     }

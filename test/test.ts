@@ -4,3 +4,4 @@
 
 joytest.testRadioChannelIrSend();
 
+//joystick.run();
