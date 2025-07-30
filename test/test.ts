@@ -4,6 +4,6 @@
 
 //joytest.testRadioChannelIrSend();
 
-joystick.run();
+joystick.run(1, 1);
 
 joytest.testListenForFriends();

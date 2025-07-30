@@ -29,12 +29,12 @@ namespace joystick {
             let group = radiop.getGroup();
          
 
-            while (input.runningTime() - startTime < 4000) {
+            while (input.runningTime() - startTime < 10000) {
                 basic.showIcon(IconNames.Target);
                 joystick.sendIRRadioMessage(DigitalPin.P8, channel, group);
-                basic.pause(300);
+                basic.pause(100);
                 basic.clearScreen();
-                basic.pause(300);                
+                basic.pause(100);                
                
             }
             
@@ -51,12 +51,20 @@ namespace joystick {
      * Run the joystick functionality
      */
     //% blockId=joystick_run block="run joystick functionality"
-    export function run() {
+    export function run(channel: number = 0, group: number = 0): void {
 
         joystick.init();
         radiop.init();
         negotiate.init("joystick");
-        negotiate.findFreeChannel();
+
+        if (channel === 0 || group === 0) {
+            negotiate.findFreeChannel();
+        }  else {
+            radiop.setChannel(channel);
+            radiop.setGroup(group);
+        }
+
+        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
 
         initRadioTransfer(); // Install A+B buttons to run the IR transfer
 
