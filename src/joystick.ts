@@ -13,30 +13,11 @@ namespace joystick {
     }
 
     /**
-     * Run the joystick functionality
+     * Setup the message handler for sending radio pairing codes.
      */
-    //% blockId=joystick_run block="run joystick functionality"
-    export function run() {
-
-        joystick.init();
-        radiop.init();
-        negotiate.init("joystick");
-        negotiate.findFreeChannel();
-
-    
-        
-        basic.forever(function () {
-            if (_runJoystick) {
-                joystickp.sendIfChanged();
-            } else {
-                basic.pause(100);
-            }
-           
-        });
-
+    function initRadioTransfer() {
         input.onButtonPressed(Button.AB, function () {
-            serial.writeLine("Button A+B pressed, sending radio IR codes");
-
+            serial.writeLine("initRadioTransfer: Button A+B pressed, sending radio IR codes");
 
             radio.off();
             negotiate.stopBeacon();
@@ -61,7 +42,34 @@ namespace joystick {
             negotiate.startBeacon();
             _runJoystick = true;
             
+            serial.writeLine("initRadioTransfer: Radio IR codes sent, radio back on");
         });
+        
+    }
+
+    /**
+     * Run the joystick functionality
+     */
+    //% blockId=joystick_run block="run joystick functionality"
+    export function run() {
+
+        joystick.init();
+        radiop.init();
+        negotiate.init("joystick");
+        negotiate.findFreeChannel();
+
+        initRadioTransfer(); // Install A+B buttons to run the IR transfer
+
+        basic.forever(function () {
+            if (_runJoystick) {
+                joystickp.sendIfChanged();
+            } else {
+                basic.pause(100);
+            }
+           
+        });
+
+
     }
     
 
