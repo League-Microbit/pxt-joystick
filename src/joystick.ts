@@ -116,6 +116,9 @@ namespace joystick {
         initJoyBackground(); // Start the background task to send joystick data
 
         serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
+        basic.showIcon(IconNames.Happy);
+        basic.pause(500);
+        basic.clearScreen();
 
     }
 

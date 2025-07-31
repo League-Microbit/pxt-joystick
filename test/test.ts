@@ -7,4 +7,4 @@
 joystick.run();
 //joystick._runJoystick = false;
 
-joytest.testListenForFriends();
+//joytest.testListenForFriends();
