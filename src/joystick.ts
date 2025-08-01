@@ -26,6 +26,7 @@ namespace joystick {
     let lastPy: number = 0;
 
     function displayLedPosition(): void {
+        /*
         let x = pins.analogReadPin(joystickp.JoystickBitPin.X);
         let y = pins.analogReadPin(joystickp.JoystickBitPin.Y);
 
@@ -36,6 +37,7 @@ namespace joystick {
         led.plot(px, py)
         lastPx = px;
         lastPy = py;
+        */
     }
 
 

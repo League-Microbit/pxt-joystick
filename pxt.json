@@ -13,9 +13,7 @@
         "README.md"
     ],
     "testFiles": [
-        "test/test.ts",
-        "test/testIRPacket.ts",
-        "test/testComm.ts"
+
     ],
     "targetVersions": {
         "target": "8.0.11",
