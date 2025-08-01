@@ -4,7 +4,9 @@
 
 //joytest.testRadioChannelIrSend();
 
-joystick.run();
+//joystick.run();
 //joystick._runJoystick = false;
 
 //joytest.testListenForFriends();
+
+joytest.testNextNecCode();
