@@ -1,6 +1,6 @@
 {
-    "name": "pxt-joystick",
-    "description": "",
+    "name": "joystickp",
+    "description": "Send joystick data over radio",
     "dependencies": {
         "core": "*",
         "radio": "*",
