@@ -17,7 +17,7 @@ namespace joystick {
     //% group.min=1 group.max=254 group.defl=1
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
-    export function init(channel: number = 1, group: number = 1, pin: DigitalPin = DigitalPin.P8): void {
+    export function init(channel: number, group: number, pin: DigitalPin = DigitalPin.P8): void {
 
         radiop.init(radiop.BROADCAST_CHANNEL, radiop.BROADCAST_GROUP, 7)
         
@@ -30,11 +30,12 @@ namespace joystick {
         irLedPin = pin;
 
         radiop.initBeacon("joystick");
+        radiop.initJoystick();
 
         initRadioTransfer(); // Install A+B buttons to run the IR transfer
         initJoyBackground(); // Start the background task to send joystick data
 
-        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
+        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}, pin ${irLedPin}`);
         basic.showIcon(IconNames.Happy);
         basic.pause(500);
         basic.clearScreen();
