@@ -6,7 +6,7 @@
         "core": "*",
         "radio": "*",
         "leagueir": "github:League-Microbit/pxt-leagueir#v0.20250802.10",
-        "radiop": "github:League-Microbit/pxt-radioext#v1.20250803.6"
+        "radiop": "github:League-Microbit/pxt-radioext#v1.20250803.7"
     },
     "files": [
         "src/main.ts",
