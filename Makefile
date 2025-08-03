@@ -1,3 +1,6 @@
+VERSION := $(shell grep '"version"' pxt.json | head -1 | sed -E 's/.*"version": *"([^"]+)".*/\1/')
+
+
 all: deploy
 
 # Initial setup 
