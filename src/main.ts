@@ -1,3 +1,3 @@
 
-joystick.run();
+joystick.init();
 

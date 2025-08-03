@@ -14,4 +14,12 @@ deploy:
 	PXT_FORCE_LOCAL=1 pxt deploy
 
 test:
-	pxt test
+	PXT_FORCE_LOCAL=1 pxt test
+
+push: build 
+	git commit --allow-empty -a -m "Release version $(VERSION)"
+	git push
+	git tag v$(VERSION) 
+	git push --tags
+
+

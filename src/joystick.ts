@@ -3,42 +3,39 @@ namespace joystick {
 
     export let _runJoystick: boolean = true;
 
-    let irtInit: boolean = false;
-    let joyBackgroundInit: boolean = false;
+    let irtInit: boolean = false; //initRadioTransfer has been called
+    let joyBackgroundInit: boolean = false; //initJoyBackground has been called
 
-    export function sendIRRadioMessage(pin: DigitalPin, channel: number , group: number): void {
-        let command = (channel << 8) | group;
-        leagueir.sendIrAddressCommand(pin, leagueir.Address.RadioChannel, command);
+    let IR_LED_PIN: DigitalPin = DigitalPin.P8; // Default IR LED pin
+
+    /**
+     * Run the joystick functionality
+     */
+    //% blockId=joystick_run block="run joystick functionality"
+    //% channel.min=1 channel.max=100 channel.defl=1
+    //% group.min=1 group.max=254 group.defl=1
+    export function init(channel: number = 0, group: number = 0): void {
+
+        radiop.init();
+        radiop.initBeacon("joystick");
+        
+        if (channel === 0 || group === 0) {
+            radiop.init();
+            radiop.findFreeChannel();
+        }  else {
+            radiop.init(channel, group);
+        }
+
+        initRadioTransfer(); // Install A+B buttons to run the IR transfer
+        initJoyBackground(); // Start the background task to send joystick data
+
+        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
+        basic.showIcon(IconNames.Happy);
+        basic.pause(500);
+        basic.clearScreen();
+
     }
 
-    export function init(): void {
-        joystickp.init()
-    }
-
-
-    function map(input:number, minIn:number, maxIn:number, minOut:number, maxOut:number): number {
-        return (input - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
-    }
-
-
-
-    let lastPx: number = 0;
-    let lastPy: number = 0;
-
-    function displayLedPosition(): void {
-        /*
-        let x = pins.analogReadPin(joystickp.JoystickBitPin.X);
-        let y = pins.analogReadPin(joystickp.JoystickBitPin.Y);
-
-        let px = map(x - 100, 1023, 0, -2, 2) + 2
-        let py = map(y - 100, 1023, 0, -2, 2) + 2
-
-        led.unplot(lastPx, lastPy); // Clear the last position
-        led.plot(px, py)
-        lastPx = px;
-        lastPy = py;
-        */
-    }
 
 
     /**
@@ -64,7 +61,7 @@ namespace joystick {
 
             while (input.runningTime() - startTime < 4000) {
                 basic.showIcon(IconNames.Target);
-                joystick.sendIRRadioMessage(DigitalPin.P8, channel, group);
+                joystick.sendIRRadioMessage(IR_LED_PIN, channel, group);
                 basic.pause(100);
                 basic.clearScreen();
                 basic.pause(100);                
@@ -86,43 +83,61 @@ namespace joystick {
         control.runInBackground(function () {
             while (true) {
                 if (_runJoystick) {
-                    if (joystickp.sendIfChanged()) {
+                    if (radiop.sendIfChanged()) {
                         displayLedPosition(); // Update the LED position based on joystick movement
                     }
                     basic.pause(10);
                 } else {
-                    basic.pause(1000);
+                    basic.pause(500);
                 }
             }
            
         });
     }
 
-    /**
-     * Run the joystick functionality
+    /** Send a RadioChannel message through the IR transmitter
+     * @param pin The pin to use for IR transmission
+     * @param channel The radio channel to send
+     * @param group The radio group to send
      */
-    //% blockId=joystick_run block="run joystick functionality"
-    export function run(channel: number = 0, group: number = 0): void {
-
-        joystick.init();
-        radiop.initBeacon("joystick");
-        
-        if (channel === 0 || group === 0) {
-            radiop.init();
-            radiop.findFreeChannel();
-        }  else {
-            radiop.init(channel, group);
-        }
-
-        initRadioTransfer(); // Install A+B buttons to run the IR transfer
-        initJoyBackground(); // Start the background task to send joystick data
-
-        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}`);
-        basic.showIcon(IconNames.Happy);
-        basic.pause(500);
-        basic.clearScreen();
-
+    export function sendIRRadioMessage(pin: DigitalPin, channel: number , group: number): void {
+        let command = (channel << 8) | group;
+        leagueir.sendIrAddressCommand(pin, leagueir.Address.RadioChannel, command);
     }
+
+
+    let lastPx: number = 0;
+    let lastPy: number = 0;
+
+    function map(input:number, minIn:number, maxIn:number, minOut:number, maxOut:number): number {
+        return (input - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
+
+
+
+
+    /** 
+     * Display the current position of the joystick on the LED matrix
+     * 
+     */
+    function displayLedPosition(): void {
+        /*
+        let x = pins.analogReadPin(joystickp.JoystickBitPin.X);
+        let y = pins.analogReadPin(joystickp.JoystickBitPin.Y);
+
+        let px = map(x - 100, 1023, 0, -2, 2) + 2
+        let py = map(y - 100, 1023, 0, -2, 2) + 2
+
+        led.unplot(lastPx, lastPy); // Clear the last position
+        led.plot(px, py)
+        lastPx = px;
+        lastPy = py;
+        */
+    }
+
+
+
+
 
 
 }

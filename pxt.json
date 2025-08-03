@@ -1,6 +1,7 @@
 {
     "name": "joystickp",
     "description": "Send joystick data over radio",
+    "version": "0.20250810.1",
     "dependencies": {
         "core": "*",
         "radio": "*",
