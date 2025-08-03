@@ -1,4 +1,5 @@
 
+//% color="#FF6600" weight=100 icon="\uf11b"
 namespace joystick { 
 
     export let _runJoystick: boolean = true;
@@ -11,22 +12,24 @@ namespace joystick {
     /**
      * Run the joystick functionality
      */
-    //% blockId=joystick_run block="run joystick functionality"
+    //% blockId=joystick_run block="Init joystick channel $channel group $group Led pin $pin"
     //% channel.min=1 channel.max=100 channel.defl=1
     //% group.min=1 group.max=254 group.defl=1
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
-    export function init(channel: number = 0, group: number = 0, irLedPin: DigitalPin = DigitalPin.P8): void {
+    export function init(channel: number = 1, group: number = 1, pin: DigitalPin = DigitalPin.P8): void {
 
-        radiop.init();
-        radiop.initBeacon("joystick");
+        radiop.init(radiop.BROADCAST_CHANNEL, radiop.BROADCAST_GROUP, 7)
         
         if (channel === 0 || group === 0) {
-            radiop.init();
             radiop.findFreeChannel();
         }  else {
-            radiop.init(channel, group);
+            radiop.init(channel, group, 7);
         }
+
+        irLedPin = pin;
+
+        radiop.initBeacon("joystick");
 
         initRadioTransfer(); // Install A+B buttons to run the IR transfer
         initJoyBackground(); // Start the background task to send joystick data
@@ -37,6 +40,18 @@ namespace joystick {
         basic.clearScreen();
 
     }
+
+    /**
+    * Run the joystick functionality on free channel
+    */
+    //% blockId=joystick_run_defl block="Init joystick on open channel Led pin $pin"
+
+    //% irLedPin.defl=P8
+    //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
+    export function initFreeChannel( pin: DigitalPin = DigitalPin.P8): void {
+        init(0,0,pin);
+    }
+
 
 
 
