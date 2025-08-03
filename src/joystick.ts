@@ -6,7 +6,7 @@ namespace joystick {
     let irtInit: boolean = false; //initRadioTransfer has been called
     let joyBackgroundInit: boolean = false; //initJoyBackground has been called
 
-    let IR_LED_PIN: DigitalPin = DigitalPin.P8; // Default IR LED pin
+    let irLedPin: DigitalPin = DigitalPin.P8; // Default IR LED pin
 
     /**
      * Run the joystick functionality
@@ -14,7 +14,9 @@ namespace joystick {
     //% blockId=joystick_run block="run joystick functionality"
     //% channel.min=1 channel.max=100 channel.defl=1
     //% group.min=1 group.max=254 group.defl=1
-    export function init(channel: number = 0, group: number = 0): void {
+    //% irLedPin.defl=P8
+    //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
+    export function init(channel: number = 0, group: number = 0, irLedPin: DigitalPin = DigitalPin.P8): void {
 
         radiop.init();
         radiop.initBeacon("joystick");
@@ -61,7 +63,7 @@ namespace joystick {
 
             while (input.runningTime() - startTime < 4000) {
                 basic.showIcon(IconNames.Target);
-                joystick.sendIRRadioMessage(IR_LED_PIN, channel, group);
+                joystick.sendIRRadioMessage(irLedPin, channel, group);
                 basic.pause(100);
                 basic.clearScreen();
                 basic.pause(100);                
