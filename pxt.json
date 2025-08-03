@@ -1,5 +1,5 @@
 {
-    "name": "joystickp",
+    "name": "joystick",
     "version": "0.20250810.1",
     "description": "Send joystick data over radio",
     "dependencies": {
