@@ -53,7 +53,7 @@ namespace joystick {
             serial.writeLine("initRadioTransfer: Button A+B pressed, sending radio IR codes");
 
             radio.off();
-            negotiate.stopBeacon();
+            radiop.stopBeacon();
             _runJoystick = false;
 
             let startTime = input.runningTime();
@@ -72,7 +72,7 @@ namespace joystick {
             }
             
             radio.on();
-            negotiate.startBeacon();
+            radiop.startBeacon();
             _runJoystick = true;
             
             serial.writeLine("initRadioTransfer: Radio IR codes sent, radio back on");
@@ -105,11 +105,11 @@ namespace joystick {
     export function run(channel: number = 0, group: number = 0): void {
 
         joystick.init();
-        negotiate.init("joystick");
+        radiop.initBeacon("joystick");
         
         if (channel === 0 || group === 0) {
             radiop.init();
-            negotiate.findFreeChannel();
+            radiop.findFreeChannel();
         }  else {
             radiop.init(channel, group);
         }

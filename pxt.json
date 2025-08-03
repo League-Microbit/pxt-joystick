@@ -4,7 +4,7 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "leagueir": "github:League-Microbit/pxt-leagueir#master",
+        "leagueir": "github:League-Microbit/pxt-leagueir#v0.20250802.10",
         "radiop": "github:League-Microbit/pxt-radioext#master"
     },
     "files": [
@@ -12,9 +12,7 @@
         "src/joystick.ts",
         "README.md"
     ],
-    "testFiles": [
-
-    ],
+    "testFiles": [],
     "targetVersions": {
         "target": "8.0.11",
         "targetId": "microbit"
