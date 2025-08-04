@@ -77,14 +77,12 @@ namespace joystick {
             let group = radiop.getGroup();
          
 
-            while (input.runningTime() - startTime < 4000) {
-                basic.showIcon(IconNames.Target);
+            basic.showIcon(IconNames.Target);
+            while (input.runningTime() - startTime < 5000) {
                 joystick.sendIRRadioMessage(irLedPin, channel, group);
-                basic.pause(100);
-                basic.clearScreen();
-                basic.pause(100);                
-               
+                basic.pause(300);
             }
+            basic.clearScreen();
             
             radio.on();
             radiop.startBeacon();
