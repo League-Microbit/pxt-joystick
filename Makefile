@@ -9,6 +9,11 @@ setup:
 	pxt target microbit
 	pxt install
 
+clean:
+	pxt clean
+	rm -rf built
+	rm -rf node_modules
+
 build:
 	PXT_FORCE_LOCAL=1 pxt build
 
