@@ -67,24 +67,24 @@ namespace joystick {
         input.onButtonPressed(Button.AB, function () {
             serial.writeLine("initRadioTransfer: Button A+B pressed, sending radio IR codes");
 
+            let startTime = input.runningTime();
+            let channel = radiop.getChannel();
+            let group = radiop.getGroup();
+
+            basic.showIcon(IconNames.Target);
+            basic.pause(250);
+            basic.clearScreen();
+
             radio.off();
             radiop.stopBeacon();
             led.enable(false); // Disable LED matrix to save power during IR transmission
             _runJoystick = false;
 
-            let startTime = input.runningTime();
-
-            let channel = radiop.getChannel();
-            let group = radiop.getGroup();
-         
-
-            basic.showIcon(IconNames.Target);
             while (input.runningTime() - startTime < 5000) {
                 joystick.sendIRRadioMessage(irLedPin, channel, group);
                 basic.pause(300);
             }
-            basic.clearScreen();
-            
+       
             radio.on();
             radiop.startBeacon();
             led.enable(true); // Re-enable LED matrix
