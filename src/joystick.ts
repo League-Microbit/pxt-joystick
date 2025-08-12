@@ -69,6 +69,7 @@ namespace joystick {
 
             radio.off();
             radiop.stopBeacon();
+            led.enable(false); // Disable LED matrix to save power during IR transmission
             _runJoystick = false;
 
             let startTime = input.runningTime();
@@ -86,6 +87,7 @@ namespace joystick {
             
             radio.on();
             radiop.startBeacon();
+            led.enable(true); // Re-enable LED matrix
             _runJoystick = true;
             
             serial.writeLine("initRadioTransfer: Radio IR codes sent, radio back on");
