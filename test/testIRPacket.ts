@@ -2,11 +2,22 @@
 
 namespace joytest {
 
+    export function testSendNecCode() {
+        
+        //leagueir.calibrate_cpp(DigitalPin.P0);
+
+        while (true) {
+            leagueir.sendIrAddressCommand(DigitalPin.P8, 0xD00D, 0xABCD);
+            pause(500);
+            //leagueir.sendIrAddressCommand(DigitalPin.P8, 0xFFFF, 0x1234);
+            //pause(500);
+        }
+
+    }
 
     export function testNextNecCode() {
             
-        joystick.run();
-       
+     
         while (true) {
             basic.showIcon(IconNames.Confused);
             let [address, command] = leagueir.readNecAddressCommand(DigitalPin.P16, 2000);
@@ -46,16 +57,9 @@ namespace joytest {
         
         let i = 0;
 
-        if(false){
-            joystick.init();
-            radiop.init();
-            negotiate.init("joystick");
-            negotiate.findFreeChannel();
-        }
-
 
         radio.off();
-        negotiate.stopBeacon();
+        radiop.stopBeacon();
 
         basic.forever(function () {
             let channel = i;

@@ -7,7 +7,8 @@
  * an empty radio channel, which you can transmit
  * to your Cutebot by pressing the A+B buttons.
  */
-joystick.initFreeChannel(DigitalPin.P8)
+
+//joystick.initFreeChannel(DigitalPin.P8)
 basic.forever(function () {
 	
 })

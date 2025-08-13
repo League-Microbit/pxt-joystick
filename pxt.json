@@ -13,7 +13,10 @@
         "src/joystick.ts",
         "README.md"
     ],
-    "testFiles": [],
+    "testFiles": [
+        "test/test.ts",
+        "test/testIRPacket.ts"
+    ],
     "targetVersions": {
         "target": "8.0.15",
         "targetId": "microbit"
