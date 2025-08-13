@@ -5,7 +5,7 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "leagueir": "github:league-microbit/pxt-leagueir#v1.20250804.1",
+        "leagueir": "github:league-microbit/pxt-leagueir#v1.20250812.1",
         "radiop": "github:league-microbit/pxt-radioext#v1.20250804.1"
     },
     "files": [
