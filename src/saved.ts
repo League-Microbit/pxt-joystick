@@ -3,7 +3,9 @@
     /**
      * Setup the message handler for sending radio pairing codes.
      */
-    //% blockId=joystick_init_radio_transfer block="Initialize radio transfer handler"
+//% blockId=joystick_init_radio_transfer block="Initialize radio transfer handler"
+    
+/*
     export function initRadioTransfer() {
 
         if (irtInit) return;
@@ -58,3 +60,5 @@
            
         });
     }
+    
+    */
