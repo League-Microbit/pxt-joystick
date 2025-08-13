@@ -94,8 +94,6 @@ namespace joystick {
         pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P14, PinPullMode.PullUp)
         pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
-
-
      
     }
 
@@ -113,8 +111,8 @@ namespace joystick {
         // Collect samples for 1 second
         basic.showIcon(IconNames.Sword);
         while (input.runningTime() - startTime < 1000) {
-            xSum += pins.analogReadPin(radiop.JoystickBitPin.X);
-            ySum += pins.analogReadPin(radiop.JoystickBitPin.Y);
+            xSum += pins.analogReadPin(JoystickBitPin.X);
+            ySum += pins.analogReadPin(JoystickBitPin.Y);
             sampleCount++;
             basic.pause(10); // Small pause between readings
         }
