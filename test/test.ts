@@ -11,12 +11,4 @@
 
 //joytest.testNextNecCode();
 
-joystick.initJoystick();
-joystick.calibrate();
 
-joytest.testSendNecCode();
-
-while (true) {
-    radiop.sendIfChanged_(joystick.newJoyPayload());
-    basic.pause(100);
-}

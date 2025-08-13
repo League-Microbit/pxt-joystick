@@ -33,42 +33,52 @@ namespace joystick {
     /**
      * Run the joystick functionality
      */
-    //% blockId=joystick_run block="Init joystick channel $channel group $group Led pin $pin"
+    //% blockId=joystick_run block="Init joystick radio channel $channel group $group Led pin $pin"
     //% channel.min=1 channel.max=100 channel.defl=1
     //% group.min=1 group.max=254 group.defl=1
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
-    export function init(channel: number, group: number, pin: DigitalPin = DigitalPin.P8): void {
+    export function initRadio(channel: number, group: number, pin: DigitalPin = DigitalPin.P8): void {
 
-        radiop.init(radiop.BROADCAST_CHANNEL, radiop.BROADCAST_GROUP, 7)
-        
-        if (channel === 0 || group === 0) {
-            radiop.findFreeChannel();
-        }  else {
-            radiop.init(channel, group, 7);
-        }
+        radiop.init(channel, group, 7);
 
         irLedPin = pin;
 
         radiop.initBeacon("joystick");
-        initJoystick();
-        calibrate();
-
 
         initRadioTransfer(); // Install A+B buttons to run the IR transfer
-        initJoyBackground(); // Start the background task to send joystick data
-
-        serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}, pin ${irLedPin}`);
-        basic.showIcon(IconNames.Happy);
-        basic.pause(500);
-        basic.clearScreen();
 
     }
+
+    /**
+     * Run the joystick functionality
+     */
+    //% blockId=joystick_run block="Init joystick radio channel on a free channel pin $pin"
+    //% channel.min=1 channel.max=100 channel.defl=1
+    //% group.min=1 group.max=254 group.defl=1
+    //% irLedPin.defl=P8
+    //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
+    export function initRadioOnFreeChannel( pin: DigitalPin = DigitalPin.P8): void {
+
+        radiop.init(radiop.BROADCAST_CHANNEL, radiop.BROADCAST_GROUP, 7)
+        
+        radiop.findFreeChannel();
+
+        irLedPin = pin;
+
+        radiop.initBeacon("joystick");
+
+        initRadioTransfer(); // Install A+B buttons to run the IR transfer
+
+    }
+
+
 
     /**
      *  Copy of radiop.initJoystick
      * @returns
      */
+    //% blockId=joystick_init block="Initialize joystick"
     export function initJoystick(): void {
         if (joystickInitialize) return;
         joystickInitialize = true;
@@ -89,6 +99,7 @@ namespace joystick {
     /**
      * Calibrate the joystick to find the value it reads when at rest
      */
+    //% blockId=joystick_calibrate block="Calibrate joystick"
     export function calibrate() {
            // Calibrate joystick center position
         let xSum = 0;
@@ -121,16 +132,7 @@ namespace joystick {
 
         
     }
-    /**
-    * Run the joystick functionality on free channel
-    */
-    //% blockId=joystick_run_defl block="Init joystick on open channel Led pin $pin"
 
-    //% irLedPin.defl=P8
-    //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
-    export function initFreeChannel( pin: DigitalPin = DigitalPin.P8): void {
-        init(0,0,pin);
-    }
 
     /**
      * Create a JoyPayload from current hardware state
@@ -179,7 +181,8 @@ namespace joystick {
     /**
      * Setup the message handler for sending radio pairing codes.
      */
-    function initRadioTransfer() {
+    //% blockId=joystick_init_radio_transfer block="Initialize radio transfer handler"
+    export function initRadioTransfer() {
 
         if (irtInit) return;
         irtInit = true;
@@ -214,6 +217,7 @@ namespace joystick {
         });
         
     }
+
     function initJoyBackground() {
         if (joyBackgroundInit) return;
         joyBackgroundInit = true;
@@ -221,7 +225,7 @@ namespace joystick {
         control.runInBackground(function () {
             while (true) {
                 if (_runJoystick) {
-                    if (radiop.sendIfChanged()) {
+                    if (radiop.sendIfChanged(joystick.newJoyPayload())) {
                         displayLedPosition(); // Update the LED position based on joystick movement
                     }
                     basic.pause(10);
