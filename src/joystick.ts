@@ -83,8 +83,11 @@ namespace joystick {
         if (joystickInitialize) return;
         joystickInitialize = true;
 
-        pins.digitalWritePin(DigitalPin.P0, 0)  // turn off buzzer
-        pins.digitalWritePin(DigitalPin.P16, 1) // Turn off vibration
+        // Setting .P0 seems to throw off IR timing, prob
+        // b/c .P0 is attached to the speaker / audio mixer
+        // and writing to it sets up a PWM resource. 
+        //pins.digitalWritePin(DigitalPin.P0, 0)  // turn off buzzer
+        //pins.digitalWritePin(DigitalPin.P16, 1) // Turn off vibration
 
         // Configure buttons
         pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
@@ -125,7 +128,7 @@ namespace joystick {
         jsXOffset = jsXCenter - defaultCenter; // Adjust offset based on center
         jsYOffset = jsYCenter - defaultCenter; // Adjust offset based on center
 
-        serial.writeLine("Joystick calibrated - Center X: " + jsXCenter + ", Y: " + jsYCenter);
+        //serial.writeLine("Joystick calibrated - Center X: " + jsXCenter + ", Y: " + jsYCenter);
         basic.showIcon(IconNames.Yes);
         basic.pause(200);
         basic.clearScreen();
@@ -216,6 +219,37 @@ namespace joystick {
             serial.writeLine("initRadioTransfer: Radio IR codes sent, radio back on");
         });
         
+    }
+
+    /**
+    * Send the radio info over IR until wee get a peer with the given class Id
+    */
+    //% block="Transfer radio info, blocking"
+    export function blockingRadioTransfer(classId: string) {
+
+        let startTime = input.runningTime();
+        let channel = radiop.getChannel();
+        let group = radiop.getGroup();
+
+    
+        while (true) {
+            basic.showIcon(IconNames.Target);
+            joystick.sendIRRadioMessage(irLedPin, channel, group);
+            basic.pause(100);
+            basic.clearScreen()
+            basic.pause(100);
+            
+            if(input.buttonIsPressed(Button.AB)){
+                basic.clearScreen()
+                return
+            }
+
+            if(radiop.peerDb.findPeerByClassId(classId)){
+                basic.clearScreen()
+                return
+            }
+        }
+
     }
 
     function initJoyBackground() {

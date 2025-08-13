@@ -13,9 +13,7 @@
         "src/joystick.ts",
         "README.md"
     ],
-    "testFiles": [
-
-    ],
+    "testFiles": [],
     "targetVersions": {
         "target": "8.0.15",
         "targetId": "microbit"
