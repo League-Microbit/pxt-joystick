@@ -9,6 +9,16 @@ namespace joystick {
 
     let irLedPin: DigitalPin = DigitalPin.P8; // Default IR LED pin
 
+
+
+    let joystickInitialize = false;
+    let defaultCenter = 512; // Default center value for joystick
+    let jsXCenter = 512; // Default center value for joystick X
+    let jsXOffset = 0; // Offset for joystick X
+    let jsYCenter = 512; // Default center value for joystick Y
+    let jsYOffset = 0; // Offset for joystick Y
+    let jsDeadzone = 10; // Deadzone for joystick movement
+
     /**
      * Run the joystick functionality
      */
@@ -38,6 +48,52 @@ namespace joystick {
         serial.writeLine(`Joystick running on channel ${radiop.getChannel()}, group ${radiop.getGroup()}, pin ${irLedPin}`);
         basic.showIcon(IconNames.Happy);
         basic.pause(500);
+        basic.clearScreen();
+
+    }
+
+    /**
+     *  Copy of radiop.initJoystick
+     * @returns
+     */
+    export function initJoystick(): void {
+        if (joystickInitialize) return;
+        joystickInitialize = true;
+
+        pins.digitalWritePin(DigitalPin.P0, 0)
+        pins.setPull(DigitalPin.P12, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P13, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P14, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        pins.digitalWritePin(DigitalPin.P16, 1)
+
+        // Calibrate joystick center position
+        let xSum = 0;
+        let ySum = 0;
+        let sampleCount = 0;
+        let startTime = input.runningTime();
+        
+        // Collect samples for 1 second
+        basic.showIcon(IconNames.Sword);
+        while (input.runningTime() - startTime < 1000) {
+            xSum += pins.analogReadPin(radiop.JoystickBitPin.X);
+            ySum += pins.analogReadPin(radiop.JoystickBitPin.Y);
+            sampleCount++;
+            basic.pause(10); // Small pause between readings
+        }
+        
+        // Calculate average center positions
+        if (sampleCount > 0) {
+            jsXCenter = Math.round(xSum / sampleCount);
+            jsYCenter = Math.round(ySum / sampleCount);
+        }
+        
+        jsXOffset = jsXCenter - defaultCenter; // Adjust offset based on center
+        jsYOffset = jsYCenter - defaultCenter; // Adjust offset based on center
+
+        serial.writeLine("Joystick calibrated - Center X: " + jsXCenter + ", Y: " + jsYCenter);
+        basic.showIcon(IconNames.Yes);
+        basic.pause(200);
         basic.clearScreen();
 
     }
