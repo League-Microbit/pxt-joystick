@@ -44,7 +44,7 @@ namespace joystick {
 
         irLedPin = pin;
 
-        radiop.initBeacon("joystick");
+        radiop.initBeacon(radiop.DeviceClass.JOYSTICK);
 
         //initRadioTransfer(); // Install A+B buttons to run the IR transfer
 
@@ -64,7 +64,7 @@ namespace joystick {
 
         irLedPin = pin;
 
-        radiop.initBeacon("joystick");
+        radiop.initBeacon(radiop.DeviceClass.JOYSTICK);
 
     }
 
@@ -83,7 +83,7 @@ namespace joystick {
 
         irLedPin = pin;
 
-        radiop.initBeacon("joystick");
+        radiop.initBeacon(radiop.DeviceClass.JOYSTICK);
     
     }
 
@@ -162,6 +162,8 @@ namespace joystick {
         let rawX = pins.analogReadPin(JoystickBitPin.X);
         let rawY = pins.analogReadPin(JoystickBitPin.Y);
         
+        let jp = new radiop.JoyPayload(); 
+        
         // Apply offsets to center the values
         let x = Math.abs(rawX - jsXOffset);
         let y = Math.abs(rawY - jsYOffset);
@@ -173,23 +175,26 @@ namespace joystick {
         if (Math.abs(y - defaultCenter) <= jsDeadzone) {
             y = defaultCenter;
         }
+
+        jp.x = x;
+        jp.y = y;
         
         // Read buttons (micro:bit built-in + joystick buttons)
-        let buttons: number[] = [];
-        if (input.buttonIsPressed(Button.A)) buttons.push(0);
-        if (input.buttonIsPressed(Button.B)) buttons.push(1);
-        if (input.logoIsPressed()) buttons.push(2);
-        if (pins.digitalReadPin(JoystickBitPin.C) == 0) buttons.push(3);  // C button (active low)
-        if (pins.digitalReadPin(JoystickBitPin.D) == 0) buttons.push(4);  // D button (active low)
-        if (pins.digitalReadPin(JoystickBitPin.E) == 0) buttons.push(5);  // E button (active low)
-        if (pins.digitalReadPin(JoystickBitPin.F) == 0) buttons.push(6);  // F button (active low)
+      
+        if (input.buttonIsPressed(Button.A)) jp.setButton(radiop.JoystickButton.A, true);   
+        if (input.buttonIsPressed(Button.B)) jp.setButton(radiop.JoystickButton.B, true);
+        if (input.logoIsPressed()) jp.setButton(radiop.JoystickButton.Logo, true);
+        if (pins.digitalReadPin(JoystickBitPin.C) == 0) jp.setButton(radiop.JoystickButton.C, true);  // C button (active low)
+        if (pins.digitalReadPin(JoystickBitPin.D) == 0) jp.setButton(radiop.JoystickButton.D, true);  // D button (active low)
+        if (pins.digitalReadPin(JoystickBitPin.E) == 0) jp.setButton(radiop.JoystickButton.E, true);  // E button (active low)
+        if (pins.digitalReadPin(JoystickBitPin.F) == 0) jp.setButton(radiop.JoystickButton.F, true);  // F button (active low)
         
         // Read accelerometer values only if requested
-        let accelX = readAccelerometer ? input.acceleration(Dimension.X) : 0;
-        let accelY = readAccelerometer ? input.acceleration(Dimension.Y) : 0;
-        let accelZ = readAccelerometer ? input.acceleration(Dimension.Z) : 0;
-        
-        return new radiop.JoyPayload(x, y, buttons, accelX, accelY, accelZ);
+        jp.accelX = readAccelerometer ? input.acceleration(Dimension.X) : 0;
+        jp.accelY = readAccelerometer ? input.acceleration(Dimension.Y) : 0;
+        jp.accelZ = readAccelerometer ? input.acceleration(Dimension.Z) : 0;
+
+        return jp;
     }
 
 
@@ -197,7 +202,7 @@ namespace joystick {
     * Send the radio info over IR until wee get a peer with the given class Id
     */
     //% block="Transfer radio info, blocking"
-    export function blockingRadioTransfer(classId: string) {
+    export function blockingRadioTransfer(deviceClass: radiop.DeviceClass): void {
 
         let startTime = input.runningTime();
         let channel = radiop.getChannel();
@@ -216,7 +221,7 @@ namespace joystick {
                 return
             }
 
-            if(radiop.peerDb.findPeerByClassId(classId)){
+            if(radiop.findPeerByClassId(deviceClass)){
                 basic.clearScreen()
                 return
             }
