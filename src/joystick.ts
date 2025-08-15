@@ -54,8 +54,6 @@ namespace joystick {
      * Run the joystick functionality
      */
     //% blockId=joystick_run block="Init joystick radio channel on a free channel pin $pin"
-    //% channel.min=1 channel.max=100 channel.defl=1
-    //% group.min=1 group.max=254 group.defl=1
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
     export function initRadioOnFreeChannel( pin: DigitalPin = DigitalPin.P8): void {
@@ -68,8 +66,25 @@ namespace joystick {
 
         radiop.initBeacon("joystick");
 
-        //initRadioTransfer(); // Install A+B buttons to run the IR transfer
+    }
 
+    /**
+     * Initialize on the channle/group chosed from the machine id, 
+     * and don't test if it is clear. 
+     */
+    //% blockId=joystick_run block="Init joystick default radio channel pin $pin"
+    //% irLedPin.defl=P8
+    //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
+    export function initRadioOnDefaultChannel(pin: DigitalPin = DigitalPin.P8): void {
+        
+        let [channel, group] = radiop.getInitialRadioRequest();
+       
+        radiop.init(channel, group, 7);
+
+        irLedPin = pin;
+
+        radiop.initBeacon("joystick");
+    
     }
 
 

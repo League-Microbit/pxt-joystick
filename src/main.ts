@@ -9,14 +9,12 @@
  */
 
 
-joystick.initRadioOnFreeChannel(DigitalPin.P8)
+//joystick.initRadioOnFreeChannel(DigitalPin.P8)
+joystick.initRadioOnDefaultChannel(DigitalPin.P8)
 joystick.blockingRadioTransfer("cutebot")
 joystick.initJoystick();
 joystick.calibrate();
 
-input.onButtonPressed(Button.AB, function() {
-    joystick.blockingRadioTransfer("cutebot")
-})
 
 basic.forever(function () {
     let payload = joystick.newJoyPayload();
