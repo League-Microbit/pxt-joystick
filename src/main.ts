@@ -11,32 +11,22 @@
 
 //joystick.initRadioOnFreeChannel(DigitalPin.P8)
 
-//joystick.initRadioOnDefaultChannel(DigitalPin.P8)
-//joystick.blockingRadioTransfer(radiop.DeviceClass.CUTEBOT);
-
-// Prepare a list of icons to pick from for transmission
-const icons: IconNames[] = [
-    IconNames.Heart,
-    IconNames.SmallHeart,
-    IconNames.Happy,
-    IconNames.Sad,
-    IconNames.Giraffe,
-    IconNames.Ghost,
-    IconNames.Skull,
-    IconNames.Fabulous,
-    IconNames.Duck,
-    IconNames.Sword
-];
+joystick.initRadioOnDefaultChannel(DigitalPin.P8)
+joystick.blockingRadioTransfer(radiop.DeviceClass.CUTEBOT);
 
 
-radiop.initDefaults()
+//radiop.initDefaults()
 joystick.initJoystick();
 joystick.calibrate();
 
-// Install handler for incoming Joy payloads (print x,y,buttons) using specialized API
-radiop.onReceiveJoystickMessage(function (jp) {
+basic.showIcon(IconNames.Heart);
+
+// Install handler for incoming Bot Status (print x,y,buttons) using specialized API
+radiop.onReceiveJoystickMessage(function (bs: radiop.JoyPayload) {
     // Decode 25-bit image value back to 5x5 and display
-    radiop.intoToImage(jp.image).showImage(0);
+    radiop.intToImage(bs.image).showImage(0);
+    bs.playSound();
+
 });
         
 basic.forever(function () {
