@@ -12,6 +12,8 @@
 //joystick.initRadioOnFreeChannel(DigitalPin.P8)
 
 joystick.initRadioOnDefaultChannel(DigitalPin.P8)
+serial.writeLine('== Joystick Transmitter ==')
+serial.writeLine('Channel ' + radiop.getChannel() + ' group ' + radiop.getGroup());
 joystick.blockingRadioTransfer(radiop.DeviceClass.CUTEBOT);
 
 
