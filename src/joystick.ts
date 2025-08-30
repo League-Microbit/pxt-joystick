@@ -201,7 +201,7 @@ namespace joystick {
     /**
     * Send the radio info over IR until wee get a peer with the given class Id
     */
-    //% block="Transfer radio info, blocking"
+    //% block="Transfer radio info, blocking for device class $deviceClass"
     export function blockingRadioTransfer(deviceClass: radiop.DeviceClass): void {
 
         let startTime = input.runningTime();
