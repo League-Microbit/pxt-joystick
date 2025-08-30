@@ -33,7 +33,7 @@ namespace joystick {
     /**
      * Run the joystick functionality
      */
-    //% blockId=joystick_run block="Init joystick radio channel $channel group $group Led pin $pin"
+    //%block="Init joystick radio channel $channel group $group Led pin $pin"
     //% channel.min=1 channel.max=100 channel.defl=1
     //% group.min=1 group.max=254 group.defl=1
     //% irLedPin.defl=P8
@@ -53,7 +53,7 @@ namespace joystick {
     /**
      * Run the joystick functionality
      */
-    //% blockId=joystick_run block="Init joystick radio channel on a free channel pin $pin"
+    //% block="Init joystick radio channel on a free channel pin $pin"
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
     export function initRadioOnFreeChannel( pin: DigitalPin = DigitalPin.P8): void {
@@ -72,7 +72,7 @@ namespace joystick {
      * Initialize on the channle/group chosed from the machine id, 
      * and don't test if it is clear. 
      */
-    //% blockId=joystick_run block="Init joystick default radio channel pin $pin"
+    //% block="Init joystick default radio channel pin $pin"
     //% irLedPin.defl=P8
     //% irLedPin.fieldEditor="gridpicker" irLedPin.fieldOptions.columns=
     export function initRadioOnDefaultChannel(pin: DigitalPin = DigitalPin.P8): void {
@@ -197,6 +197,14 @@ namespace joystick {
         return jp;
     }
 
+
+    /**
+     * Send JoystickPayload over radio
+     */
+    //% blockId=joystick_send_payload block="send joystick payload $payload"
+    export function sendJoystickPayload(payload: radiop.JoyPayload): void {
+        payload.send()
+    }
 
     /**
     * Send the radio info over IR until wee get a peer with the given class Id
