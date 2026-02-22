@@ -1,6 +1,6 @@
 {
     "name": "joystick",
-    "version": "1.20260222.2", 
+    "version": "1.20260222.3", 
     "description": "Send joystick data over radio",
     "dependencies": {
         "core": "*",
@@ -9,7 +9,7 @@
         "radiop": "github:league-microbit/pxt-radioext#v1.20250816.2"
     },
     "files": [
-        "src/main.ts",
+
         "src/joystick.ts",
         "README.md"
     ],
