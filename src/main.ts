@@ -8,7 +8,7 @@
  * to your Cutebot by pressing the A+B buttons.
  */
 
-
+if (false) {
 //joystick.initRadioOnFreeChannel(DigitalPin.P8)
 
 joystick.initRadioOnDefaultChannel(DigitalPin.P8)
@@ -53,3 +53,5 @@ basic.forever(function () {
     }
 
 })
+
+}
