@@ -155,7 +155,8 @@ namespace joystick {
      * @param readAccelerometer Whether to read accelerometer values (default: false)
      * @returns A new JoyPayload instance with current joystick state
      */
-    //% blockId=joystick_new_payload block="create joystick payload"
+    //% blockId=joystick_new_payload block="create joystick payload||read accelerometer $readAccelerometer"
+    //% readAccelerometer.shadow="toggleOnOff" readAccelerometer.defl=false
     export function newJoyPayload(readAccelerometer: boolean = false): radiop.JoyPayload {
 
         // Read joystick X and Y from analog pins
